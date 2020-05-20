@@ -1,0 +1,15 @@
+<ng-container id="editor-container" class="d-flex justify-content-center">
+
+  <ngs-code-editor theme="vs" [options]="options" (valueChanged)="codeChanged($event)" [codeModel]="model"></ngs-code-editor>
+
+  <div class="form-group w-75 d-flex justify-content-center" id="control-group">
+    <button class="btn btn-primary" (click)="compile()">Compile</button>
+    <button class="btn btn-success ml-5" (click)="test()" disabled>Run</button>
+  </div>
+
+  <div class="form-group w-75" id="console-group">
+    <label for="console">Console</label>
+    <textarea [innerHTML]="compilationResult" class="form-control overflow-scroll"
+              id="console" rows="10" readonly placeholder="Compilation results will show here"></textarea>
+  </div>
+</ng-container>
