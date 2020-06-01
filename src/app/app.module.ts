@@ -7,6 +7,8 @@ import { AppComponent } from './app.component';
 import { EditorComponent } from './components/editor/editor.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import {HttpClientModule} from '@angular/common/http';
+import {MonacoEditorModule} from 'ngx-monaco-editor';
+import {FormsModule} from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -16,9 +18,10 @@ import {HttpClientModule} from '@angular/common/http';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    CodeEditorModule.forRoot(),
+    MonacoEditorModule.forRoot(),
     NgbModule,
-    HttpClientModule
+    HttpClientModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

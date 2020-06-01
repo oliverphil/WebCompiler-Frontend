@@ -14,8 +14,16 @@
   width: 75vw;
 }
 
-::ng-deep #editor {
+#editor {
   height: 50vh;
   width: 75vw;
   margin: auto;
+}
+
+.errorDecoration {
+  background: red;
+}
+
+.errorGlyph {
+  background: lightblue;
 }

@@ -2,26 +2,24 @@ import {Component, ElementRef, OnInit} from '@angular/core';
 import { CodeModel } from '@ngstack/code-editor';
 import {CompileService} from '../../services/compile-service.service';
 import { CompilationResult } from '../../../models';
+import {NgxEditorModel} from 'ngx-monaco-editor';
 
 @Component({
   selector: 'app-editor',
   templateUrl: './editor.component.html',
   styleUrls: ['./editor.component.scss']
 })
-export class EditorComponent implements OnInit {
+export class EditorComponent {
 
   options = {
+    theme: 'vs',
     contextmenu: true,
     minimap: {
       enabled: false
-    }
+    },
+    glyphMargin: true,
+    language: 'java'
   };
-
-  model: CodeModel = {
-    language: 'java',
-    uri: '',
-    value: ''
-  }
 
   code = [
     'public static void main(String args[]) {',
@@ -31,18 +29,35 @@ export class EditorComponent implements OnInit {
 
   compilationResult = '';
 
+  editor: any;
+  decorations;
+
   constructor(private compileService: CompileService) { }
 
-  ngOnInit(): void {
-    this.model.value = this.code;
-  }
-
-  codeChanged(e) {
-    this.code = this.model.value = e;
+  onEditorInit(editor: any): void {
+    this.editor = editor;
   }
 
   compile() {
     this.compileService.compile(this.code).subscribe((res: CompilationResult) => {
+      let decs = [];
+      res.errorLines.forEach(line => {
+        const lineNumber = Number.parseInt(line, 10);
+        decs.push({
+          range: new monaco.Range(lineNumber, 1, lineNumber, 1),
+          options: {
+            isWholeLine: true,
+            glyphMarginClassName: 'bg-danger'
+          }
+        });
+      });
+      if (decs.length === 0) {
+        decs = [{
+          range: new monaco.Range(1, 1, 1, 1),
+          options: {}
+        }];
+      }
+      this.decorations = this.editor.deltaDecorations(this.decorations ? this.decorations : [], decs);
       this.compilationResult = res.compileResult;
     });
   }
