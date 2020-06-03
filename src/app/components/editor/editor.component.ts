@@ -1,8 +1,6 @@
 import {Component, ElementRef, OnInit} from '@angular/core';
-import { CodeModel } from '@ngstack/code-editor';
 import {CompileService} from '../../services/compile-service.service';
 import { CompilationResult } from '../../../models';
-import {NgxEditorModel} from 'ngx-monaco-editor';
 
 @Component({
   selector: 'app-editor',
