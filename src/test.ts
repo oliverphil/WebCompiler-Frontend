@@ -6,6 +6,7 @@ import {
   BrowserDynamicTestingModule,
   platformBrowserDynamicTesting
 } from '@angular/platform-browser-dynamic/testing';
+import {MonacoEditorModule} from 'ngx-monaco-editor';
 
 declare const require: {
   context(path: string, deep?: boolean, filter?: RegExp): {

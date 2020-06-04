@@ -1,6 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { InformationFormComponent } from './information-form.component';
+import {HttpClientTestingModule} from '@angular/common/http/testing';
+import {RouterTestingModule} from '@angular/router/testing';
+import {FormsModule} from '@angular/forms';
 
 describe('InformationFormComponent', () => {
   let component: InformationFormComponent;
@@ -8,7 +11,12 @@ describe('InformationFormComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ InformationFormComponent ]
+      declarations: [ InformationFormComponent ],
+      imports: [
+        HttpClientTestingModule,
+        RouterTestingModule,
+        FormsModule
+      ]
     })
     .compileComponents();
   }));
