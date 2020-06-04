@@ -1,0 +1,11 @@
+stages:
+  - test
+
+angular_tests:
+  image: node:latest
+  stage: test
+  script:
+    - npm install
+    - npm run test
+  tags:
+    - docker
