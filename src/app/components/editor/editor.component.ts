@@ -1,7 +1,10 @@
-import {Component, ElementRef, OnInit} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {CompileService} from '../../services/compile-service.service';
-import { CompilationResult } from '../../../models';
-import {Observable, Subscription} from 'rxjs';
+import {CompilationResult, Decoration} from '../../../models';
+import {AceComponent, AceConfigInterface, AceDirective} from 'ngx-ace-wrapper';
+import 'brace';
+import 'brace/mode/java';
+import 'brace/theme/github';
 
 @Component({
   selector: 'app-editor',
@@ -9,16 +12,6 @@ import {Observable, Subscription} from 'rxjs';
   styleUrls: ['./editor.component.scss']
 })
 export class EditorComponent {
-
-  options = {
-    theme: 'vs',
-    contextmenu: true,
-    minimap: {
-      enabled: false
-    },
-    glyphMargin: true,
-    language: 'java'
-  };
 
   code = [
     'public static void main(String args[]) {',
@@ -28,38 +21,34 @@ export class EditorComponent {
 
   compilationResult = '';
 
-  editor: any;
-  decorations;
+  config: AceConfigInterface = {
+    mode: 'java',
+    theme: 'github',
+    showGutter: true
+  };
+
+  decs: Decoration[] = [];
+
+  @ViewChild(AceDirective) directiveRef?: AceDirective;
+  @ViewChild(AceComponent) componentRef?: AceComponent;
 
   constructor(private compileService: CompileService) { }
 
-  onEditorInit(editor: any): void {
-    this.editor = editor;
-    console.log(editor.range);
-  }
+  async compile() {
+    const aceSession = this.componentRef.directiveRef.ace().getSession();
+    const res = await this.compileService.compile(this.code).toPromise();
+    this.decs.forEach(dec => aceSession.removeGutterDecoration(dec.lineNumber, dec.className));
+    this.decs = [];
 
-  compile() {
-    this.compileService.compile(this.code).subscribe((res: CompilationResult) => {
-      let decs = [];
-      res.errorLines.forEach(line => {
-        const lineNumber = Number.parseInt(line, 10);
-        decs.push({
-          range: new monaco.Range(lineNumber, 1, lineNumber, 1),
-          options: {
-            isWholeLine: true,
-            glyphMarginClassName: 'bg-danger'
-          }
-        });
+    res.errorLines.forEach(line => {
+      const lineNumber = Number.parseInt(line, 10);
+      aceSession.addGutterDecoration(lineNumber - 1, 'ace_error');
+      this.decs.push({
+        lineNumber: lineNumber - 1,
+        className: 'ace_error'
       });
-      if (decs.length === 0) {
-        decs = [{
-          range: new monaco.Range(1, 1, 1, 1),
-          options: {}
-        }];
-      }
-      this.decorations = this.editor.deltaDecorations(this.decorations ? this.decorations : [], decs);
-      this.compilationResult = res.compileResult;
     });
+    this.compilationResult = res.compileResult;
   }
 
   test(){}
