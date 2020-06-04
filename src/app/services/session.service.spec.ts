@@ -8,9 +8,15 @@ describe('SessionService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({});
     service = TestBed.inject(SessionService);
+    localStorage.clear();
   });
 
   it('should be created', () => {
     expect(service).toBeTruthy();
+  });
+
+  it('if session key exists, should return existing session key', () => {
+    localStorage.setItem('sessionKey', 'existing key');
+    expect(service.createSessionKey()).toBe('existing key');
   });
 });

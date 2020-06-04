@@ -1,10 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 
 import { CompileService } from './compile-service.service';
-import {HttpClientTestingModule} from '@angular/common/http/testing';
+import {HttpClientTestingModule, HttpTestingController, TestRequest} from '@angular/common/http/testing';
+import {environment} from '../../environments/environment';
 
 describe('CompileService', () => {
   let service: CompileService;
+  let httpMock: HttpTestingController
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -13,6 +15,11 @@ describe('CompileService', () => {
       ]
     });
     service = TestBed.inject(CompileService);
+    httpMock = TestBed.inject(HttpTestingController);
+  });
+
+  afterEach(() => {
+    httpMock.verify();
   });
 
   it('should be created', () => {

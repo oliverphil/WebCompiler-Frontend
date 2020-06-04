@@ -1,6 +1,7 @@
 import {Component, ElementRef, OnInit} from '@angular/core';
 import {CompileService} from '../../services/compile-service.service';
 import { CompilationResult } from '../../../models';
+import {Observable, Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-editor',
@@ -34,6 +35,7 @@ export class EditorComponent {
 
   onEditorInit(editor: any): void {
     this.editor = editor;
+    console.log(editor.range);
   }
 
   compile() {
