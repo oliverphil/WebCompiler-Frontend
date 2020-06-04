@@ -9,6 +9,8 @@ import {HttpClientModule} from '@angular/common/http';
 import {MonacoEditorModule} from 'ngx-monaco-editor';
 import {FormsModule} from '@angular/forms';
 import { DeclarationComponent } from './components/declaration/declaration.component';
+import {ToastrModule} from 'ngx-toastr';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -22,7 +24,9 @@ import { DeclarationComponent } from './components/declaration/declaration.compo
     MonacoEditorModule.forRoot(),
     NgbModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    ToastrModule.forRoot(),
+    BrowserAnimationsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

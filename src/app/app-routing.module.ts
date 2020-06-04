@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import {EditorComponent} from './components/editor/editor.component';
 import {DeclarationComponent} from './components/declaration/declaration.component';
+import {AuthService} from './services/auth.service';
 
 
 const routes: Routes = [
@@ -16,8 +17,9 @@ const routes: Routes = [
     component: DeclarationComponent
   },
   {
-    path: 'editor/:challenge',
-    component: EditorComponent
+    path: 'editor',
+    component: EditorComponent,
+    canActivate: [AuthService]
   }
 ];
 
