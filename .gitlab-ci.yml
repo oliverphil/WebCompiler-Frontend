@@ -1,11 +1,22 @@
+image: trion/ng-cli-karma
+
 stages:
   - test
 
+before_script:
+  - npm install
+
+cache:
+  paths:
+    - node_modules/
+
 angular_tests:
-  image: node:latest
   stage: test
   script:
-    - npm install
-    - npm run test
+    - ng test --code-coverage --progress false --watch false
+  coverage: '/Lines \W+: (\d+\.\d+)%.*/'
+  artifacts:
+    paths:
+      - coverage/
   tags:
     - docker
