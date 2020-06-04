@@ -24,6 +24,9 @@ export class AuthService implements CanActivate {
   }
 }
 
+@Injectable({
+  providedIn: 'root'
+})
 export class FormCompleteService implements CanActivate {
   constructor(
     private router: Router,

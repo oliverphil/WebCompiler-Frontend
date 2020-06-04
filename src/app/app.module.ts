@@ -7,16 +7,18 @@ import { EditorComponent } from './components/editor/editor.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import {HttpClientModule} from '@angular/common/http';
 import {MonacoEditorModule} from 'ngx-monaco-editor';
-import {FormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { DeclarationComponent } from './components/declaration/declaration.component';
 import {ToastrModule} from 'ngx-toastr';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {InformationFormComponent} from './components/information-form/information-form.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     EditorComponent,
-    DeclarationComponent
+    DeclarationComponent,
+    InformationFormComponent
   ],
   imports: [
     BrowserModule,
@@ -26,7 +28,8 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
     HttpClientModule,
     FormsModule,
     ToastrModule.forRoot(),
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

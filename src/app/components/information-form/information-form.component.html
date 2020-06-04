@@ -1,0 +1,48 @@
+<div class="form-wrapper w-50 text-justify">
+  <h3>Your Information</h3>
+  <h6>Please complete the following questions</h6>
+
+  <form id="userInformation" name="userInformation" (submit)="submit(userInformationForm)" #userInformationForm="ngForm">
+    <div class="row d-inline-block w-100">
+      <div class="d-inline-block pt-2">
+        <label for="age">Age</label>
+        <select name="age" id="age" required class="form-control" [(ngModel)]="userInformation.age">
+          <option *ngFor="let age of ageOptions" [value]="age">
+            {{age}}
+          </option>
+        </select>
+      </div>
+
+      <div class="d-inline-block pl-5">
+        <label for="occupation">Occupation</label>
+        <input type="text" name="occupation" id="occupation" required class="form-control" [(ngModel)]="userInformation.occupation" />
+      </div>
+
+      <div class="d-inline-block pl-5">
+        <label for="javaExperience">No. Years Experience With Java</label>
+        <select name="javaExperience" id="javaExperience" required class="form-control" [(ngModel)]="userInformation.javaExperience">
+          <option *ngFor="let range of javaExperienceOptions" [value]="range">
+            {{range}}
+          </option>
+        </select>
+      </div>
+    </div>
+
+    <div class="pt-3 row d-block">
+      <label for="education">Relevant Education (Computer Science/Software Engineering/Related Degree/Diploma)</label>
+      <input type="text" name="education" id="education" class="form-control" [(ngModel)]="userInformation.education" />
+    </div>
+
+    <div class="pt-3 row d-block">
+      <label for="otherLanguages">Experience with Other Programming Lanuages</label>
+      <input type="text" name="otherLanguages" id="otherLanguages" class="form-control" [(ngModel)]="userInformation.otherLanguages" required />
+    </div>
+
+    <div class="pt-3 row d-block">
+      <label for="ide">Experience with Integrated Development Environments (IDEs)</label>
+      <input type="text" name="ide" id="ide" class="form-control" [(ngModel)]="userInformation.ide" required />
+    </div>
+
+    <button type="submit" class="form-control btn btn-primary mt-3" [disabled]="!userInformationForm.valid">Submit</button>
+  </form>
+</div>
