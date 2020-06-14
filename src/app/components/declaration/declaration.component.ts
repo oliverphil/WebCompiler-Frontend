@@ -9,6 +9,8 @@ import {Router} from '@angular/router';
 })
 export class DeclarationComponent implements OnInit {
 
+  checkbox: boolean = false;
+
   constructor(
     private sessionService: SessionService,
     private router: Router
