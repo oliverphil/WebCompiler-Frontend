@@ -1,17 +1,19 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {AfterViewChecked, AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {CompileService} from '../../services/compile-service.service';
-import {CompilationResult, Decoration} from '../../../models';
+import {ChallengeInstruction, CompilationResult, Decoration} from '../../../models';
 import {AceComponent, AceConfigInterface, AceDirective} from 'ngx-ace-wrapper';
 import 'brace';
 import 'brace/mode/java';
 import 'brace/theme/github';
+import {ChallengesService} from '../../services/challenges.service';
+import {Observable} from 'rxjs';
 
 @Component({
   selector: 'app-editor',
   templateUrl: './editor.component.html',
   styleUrls: ['./editor.component.scss']
 })
-export class EditorComponent {
+export class EditorComponent implements OnInit {
 
   code = [
     'public static void main(String args[]) {',
@@ -32,7 +34,20 @@ export class EditorComponent {
   @ViewChild(AceDirective) directiveRef?: AceDirective;
   @ViewChild(AceComponent) componentRef?: AceComponent;
 
-  constructor(private compileService: CompileService) { }
+  challenges: Observable<ChallengeInstruction>;
+
+  constructor(
+    private compileService: CompileService,
+    private challengesService: ChallengesService
+  ) { }
+
+  ngOnInit() {
+    this.challenges = this.challengesService.getCurrentChallenge();
+    this.challenges.subscribe(res => {
+      this.code = res.starterCode;
+    });
+    this.challengesService.initChallenges();
+  }
 
   async compile() {
     const aceSession = this.componentRef.directiveRef.ace().getSession();
