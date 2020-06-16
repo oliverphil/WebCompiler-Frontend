@@ -1,6 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ChallengeDetailsComponent } from './challenge-details.component';
+import {MarkdownService} from 'ngx-markdown';
+import {HttpClientTestingModule} from '@angular/common/http/testing';
 
 describe('ChallengeDetailsComponent', () => {
   let component: ChallengeDetailsComponent;
@@ -8,7 +10,10 @@ describe('ChallengeDetailsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ChallengeDetailsComponent ]
+      declarations: [ ChallengeDetailsComponent ],
+      imports: [
+        HttpClientTestingModule
+      ]
     })
     .compileComponents();
   }));

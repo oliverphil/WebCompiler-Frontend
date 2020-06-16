@@ -16,16 +16,13 @@ export class ChallengeDetailsComponent implements AfterViewInit {
   challenges: Observable<ChallengeInstruction>;
 
   constructor(
-    private markdownService: MarkdownService,
     private challengesService: ChallengesService
   ) { }
 
   ngAfterViewInit() {
     this.challenges = this.challengesService.getCurrentChallenge();
     this.challenges.subscribe(res => {
-      const instructions = res.instructions;
-      const renderedHTML = this.markdownService.compile(instructions);
-      this.instructionRef.nativeElement.innerHTML = renderedHTML;
+      this.instructionRef.nativeElement.innerHTML = res.instructions;
     });
     this.challengesService.initChallenges();
   }
