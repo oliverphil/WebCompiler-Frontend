@@ -11,4 +11,6 @@ export class Decoration {
 export class ChallengeInstruction {
   instructions: string;
   starterCode: string;
+  challengeName: string;
+  userCode?: string;
 }

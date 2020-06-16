@@ -16,6 +16,7 @@ import { ChallengeDetailsComponent } from './components/challenge-details/challe
 import { ChallengeEditorComponent } from './components/challenge-editor/challenge-editor.component';
 import {SplitterModule} from '@syncfusion/ej2-angular-layouts';
 import {MarkdownModule, MarkdownService, MarkedOptions, MarkedRenderer} from 'ngx-markdown';
+import { EditorHeaderComponent } from './components/editor-header/editor-header.component';
 
 const DEFAULT_ACE_CONFIG: AceConfigInterface = {
 
@@ -28,7 +29,8 @@ const DEFAULT_ACE_CONFIG: AceConfigInterface = {
     DeclarationComponent,
     InformationFormComponent,
     ChallengeDetailsComponent,
-    ChallengeEditorComponent
+    ChallengeEditorComponent,
+    EditorHeaderComponent
   ],
   imports: [
     BrowserModule,

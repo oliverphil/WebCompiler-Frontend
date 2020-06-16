@@ -55,7 +55,7 @@ export class EditorComponent implements OnInit {
     this.decs.forEach(dec => aceSession.removeGutterDecoration(dec.lineNumber, dec.className));
     this.decs = [];
 
-    res.errorLines.forEach(line => {
+    res?.errorLines.forEach(line => {
       const lineNumber = Number.parseInt(line, 10);
       aceSession.addGutterDecoration(lineNumber - 1, 'ace_error');
       this.decs.push({
