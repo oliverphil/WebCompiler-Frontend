@@ -34,7 +34,7 @@ export class EditorComponent implements OnInit, OnDestroy {
   @ViewChild(AceComponent) componentRef?: AceComponent;
 
   challenges: Observable<ChallengeInstruction>;
-
+  challenge: ChallengeInstruction;
   s: Subscription;
 
   constructor(
@@ -45,6 +45,7 @@ export class EditorComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.challenges = this.challengesService.getCurrentChallenge();
     this.s = this.challenges.subscribe(res => {
+      this.challenge = res;
       this.code = localStorage.getItem(`challenge${this.challengesService.currentChallenge}`) || res.starterCode;
     });
     this.challengesService.initChallenges();
@@ -56,7 +57,7 @@ export class EditorComponent implements OnInit, OnDestroy {
 
   async compile() {
     const aceSession = this.componentRef.directiveRef.ace().getSession();
-    const res = await this.compileService.compile(this.code).toPromise();
+    const res = await this.compileService.compile(this.code, this.challenge?.challengeName).toPromise();
     this.decs.forEach(dec => aceSession.removeGutterDecoration(dec.lineNumber, dec.className));
     this.decs = [];
 

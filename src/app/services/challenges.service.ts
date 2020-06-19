@@ -79,6 +79,7 @@ export class ChallengesService {
   updateUsersCode(code: string): void {
     if (this.challenges) {
       const chal = this.challenges[this.currentChallenge];
+      // has to assign to both because otherwise it doesn't save??
       chal.userCode = chal.starterCode = code ? code : chal.starterCode;
     }
   }
