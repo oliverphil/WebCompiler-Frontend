@@ -36,7 +36,7 @@ describe('CompileService', () => {
       expect(res.compileResult).toBe('success');
       done();
     });
-    const req = httpMock.expectOne('/compile');
+    const req = httpMock.expectOne(`${environment.apiUrl}/compile`);
     req.flush({compileResult: 'success'});
   });
 });
