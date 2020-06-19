@@ -1,7 +1,7 @@
 <ng-container id="editor-container" class="d-flex justify-content-center">
 
 <!--  <ngx-monaco-editor id="editor" [options]="options" [lang]="'java'" [(ngModel)]="code" (onInit)="onEditorInit($event)"></ngx-monaco-editor>-->
-  <ace [config]="config" [(value)]="code" id="editor"></ace>
+  <ace [config]="config" [(value)]="code" id="editor" (change)="updateCode($event)"></ace>
 
   <div class="form-group w-75 d-flex justify-content-center" id="control-group">
     <button class="btn btn-primary" (click)="compile()">Compile</button>

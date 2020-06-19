@@ -5,13 +5,18 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { EditorComponent } from './components/editor/editor.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import {HttpClientModule} from '@angular/common/http';
+import {HttpClient, HttpClientModule} from '@angular/common/http';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { DeclarationComponent } from './components/declaration/declaration.component';
 import {ToastrModule} from 'ngx-toastr';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {InformationFormComponent} from './components/information-form/information-form.component';
 import {ACE_CONFIG, AceConfigInterface, AceModule} from 'ngx-ace-wrapper';
+import { ChallengeDetailsComponent } from './components/challenge-details/challenge-details.component';
+import { ChallengeEditorComponent } from './components/challenge-editor/challenge-editor.component';
+import {SplitterModule} from '@syncfusion/ej2-angular-layouts';
+import {MarkdownModule, MarkdownService, MarkedOptions, MarkedRenderer} from 'ngx-markdown';
+import { EditorHeaderComponent } from './components/editor-header/editor-header.component';
 
 const DEFAULT_ACE_CONFIG: AceConfigInterface = {
 
@@ -22,7 +27,10 @@ const DEFAULT_ACE_CONFIG: AceConfigInterface = {
     AppComponent,
     EditorComponent,
     DeclarationComponent,
-    InformationFormComponent
+    InformationFormComponent,
+    ChallengeDetailsComponent,
+    ChallengeEditorComponent,
+    EditorHeaderComponent
   ],
   imports: [
     BrowserModule,
@@ -33,7 +41,9 @@ const DEFAULT_ACE_CONFIG: AceConfigInterface = {
     ToastrModule.forRoot(),
     BrowserAnimationsModule,
     ReactiveFormsModule,
-    AceModule
+    AceModule,
+    SplitterModule,
+    MarkdownModule.forRoot()
   ],
   providers: [{
     provide: ACE_CONFIG,

@@ -9,7 +9,12 @@ export class CompileService {
 
   constructor(private http: HttpClient) { }
 
-  compile(code: string) {
-    return this.http.post<CompilationResult>('/compile', code);
+  compile(code: string, challengeName: string) {
+    const sessionKey = localStorage.getItem('sessionKey');
+    return this.http.post<CompilationResult>('/compile', {
+      code,
+      sessionKey,
+      challengeName
+    });
   }
 }

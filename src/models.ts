@@ -7,3 +7,10 @@ export class Decoration {
   lineNumber: number;
   className: string;
 }
+
+export class ChallengeInstruction {
+  instructions: string;
+  starterCode: string;
+  challengeName: string;
+  userCode?: string;
+}

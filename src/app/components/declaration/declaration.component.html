@@ -74,5 +74,10 @@
     By continuing, you agree to the above information and are giving consent for us to use your responses in this research.
   </p>
 
-  <button id="submit" class="btn btn-primary" (click)="continue()">Continue</button>
+  <div class="form-check d-block">
+    <input id="agree" class="form-check-input" type="checkbox" (click)="checkbox=!checkbox">
+    <label for="agree" class="form-check-label">I Agree</label>
+  </div>
+
+  <button id="submit" class="btn btn-primary mt-3" (click)="continue()" [disabled]="!checkbox">Continue</button>
 </div>

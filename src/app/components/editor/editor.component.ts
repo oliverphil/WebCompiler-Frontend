@@ -1,17 +1,19 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {AfterContentChecked, AfterViewChecked, AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {CompileService} from '../../services/compile-service.service';
-import {CompilationResult, Decoration} from '../../../models';
+import {ChallengeInstruction, CompilationResult, Decoration} from '../../../models';
 import {AceComponent, AceConfigInterface, AceDirective} from 'ngx-ace-wrapper';
 import 'brace';
 import 'brace/mode/java';
-import 'brace/theme/github';
+import 'brace/theme/crimson_editor';
+import {ChallengesService} from '../../services/challenges.service';
+import {Observable, Subject, Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-editor',
   templateUrl: './editor.component.html',
   styleUrls: ['./editor.component.scss']
 })
-export class EditorComponent {
+export class EditorComponent implements OnInit, OnDestroy {
 
   code = [
     'public static void main(String args[]) {',
@@ -23,24 +25,43 @@ export class EditorComponent {
 
   config: AceConfigInterface = {
     mode: 'java',
-    theme: 'github',
+    theme: 'crimson_editor',
     showGutter: true
   };
 
   decs: Decoration[] = [];
 
-  @ViewChild(AceDirective) directiveRef?: AceDirective;
   @ViewChild(AceComponent) componentRef?: AceComponent;
 
-  constructor(private compileService: CompileService) { }
+  challenges: Observable<ChallengeInstruction>;
+  challenge: ChallengeInstruction;
+  s: Subscription;
+
+  constructor(
+    private compileService: CompileService,
+    private challengesService: ChallengesService
+  ) { }
+
+  ngOnInit() {
+    this.challenges = this.challengesService.getCurrentChallenge();
+    this.s = this.challenges.subscribe(res => {
+      this.challenge = res;
+      this.code = res.starterCode;
+    });
+    this.challengesService.initChallenges();
+  }
+
+  ngOnDestroy() {
+    this.s.unsubscribe();
+  }
 
   async compile() {
     const aceSession = this.componentRef.directiveRef.ace().getSession();
-    const res = await this.compileService.compile(this.code).toPromise();
+    const res = await this.compileService.compile(this.code, this.challenge?.challengeName).toPromise();
     this.decs.forEach(dec => aceSession.removeGutterDecoration(dec.lineNumber, dec.className));
     this.decs = [];
 
-    res.errorLines.forEach(line => {
+    res?.errorLines.forEach(line => {
       const lineNumber = Number.parseInt(line, 10);
       aceSession.addGutterDecoration(lineNumber - 1, 'ace_error');
       this.decs.push({
@@ -48,7 +69,11 @@ export class EditorComponent {
         className: 'ace_error'
       });
     });
-    this.compilationResult = res.compileResult;
+    this.compilationResult = res?.compileResult || 'Error while compiling';
+  }
+
+  updateCode(e) {
+    this.challengesService.updateUsersCode(this.code);
   }
 
   test(){}
