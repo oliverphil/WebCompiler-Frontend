@@ -2,16 +2,19 @@ import {async, ComponentFixture, fakeAsync, TestBed} from '@angular/core/testing
 
 import { EditorComponent } from './editor.component';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
-import {CompilationResult, Decoration} from '../../../models';
-import {of} from 'rxjs';
+import {ChallengeInstruction, CompilationResult, Decoration} from '../../../models';
+import {of, Subject} from 'rxjs';
 import {ACE_CONFIG, AceModule} from 'ngx-ace-wrapper';
 import {CompileService} from '../../services/compile-service.service';
+import {ChallengesService} from '../../services/challenges.service';
 
 describe('EditorComponent', () => {
   let component: EditorComponent;
   let fixture: ComponentFixture<EditorComponent>;
 
   const compileSpy = jasmine.createSpyObj('CompileService', ['compile']);
+  const challengeServicesSpy = jasmine.createSpyObj('ChallengesService', ['getCurrentChallenge', 'initChallenges']);
+
 
   const successfulCompilation: CompilationResult = {
     compileResult: 'Compilation Successful',
@@ -37,12 +40,30 @@ describe('EditorComponent', () => {
       {
         provide: CompileService,
         useValue: compileSpy
+      },
+      {
+        provide: ChallengesService,
+        useValue: challengeServicesSpy
       }]
     })
       .compileComponents();
   }));
 
+  const exampleChallenge = {
+    challengeName: 'exampleChallenge',
+    instructions: 'here are some test instructions',
+    starterCode: 'test code;'
+  };
+
+  const subj = new Subject<ChallengeInstruction>();
+
   beforeEach(() => {
+    challengeServicesSpy.getCurrentChallenge = () => {
+      return subj.asObservable();
+    };
+    challengeServicesSpy.initChallenges = () => {
+      subj.next(exampleChallenge);
+    };
     fixture = TestBed.createComponent(EditorComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -53,7 +74,7 @@ describe('EditorComponent', () => {
   });
 
   it('successful compilation should have no decorations', async (done) => {
-    compileSpy.compile = (code) => of(successfulCompilation);
+    compileSpy.compile = (code, challengeName: '') => of(successfulCompilation);
     component.compile().then(() => {
       expect(component.compilationResult).toBe('Compilation Successful');
       expect(component.decs).toEqual([]);
@@ -67,7 +88,7 @@ describe('EditorComponent', () => {
       lineNumber: 1,
       className: 'ace_error'
     }];
-    compileSpy.compile = (code) => of(successfulCompilation);
+    compileSpy.compile = (code, challengeName: '') => of(successfulCompilation);
     component.compile().then(() => {
       expect(component.compilationResult).toBe('Compilation Successful');
       expect(component.decs).toEqual([]);
@@ -91,10 +112,25 @@ describe('EditorComponent', () => {
       }
     ];
 
-    compileSpy.compile = (code) => of(unsuccessfulCompilation);
+    compileSpy.compile = (code, challengeName: '') => of(unsuccessfulCompilation);
     component.compile().then(() => {
       expect(component.compilationResult).toBe(unsuccessfulCompilation.compileResult);
       expect(component.decs).toEqual(errorLines);
+      done();
+    });
+  });
+
+  it('updated subject should assign challenges and code variables', () => {
+    expect(component.challenge).toEqual(exampleChallenge);
+    expect(component.code).toBe(exampleChallenge.starterCode);
+  });
+
+  it('compilation with no challenge or res', async (done) => {
+    component.challenge = null;
+    compileSpy.compile = (code, challengeName) => of(null);
+    component.compile().then(() => {
+      expect(component.compilationResult).toBe('Error while compiling');
+      expect(component.decs).toEqual([]);
       done();
     });
   });

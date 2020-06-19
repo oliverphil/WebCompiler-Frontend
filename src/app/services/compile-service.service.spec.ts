@@ -6,7 +6,7 @@ import {environment} from '../../environments/environment';
 
 describe('CompileService', () => {
   let service: CompileService;
-  let httpMock: HttpTestingController
+  let httpMock: HttpTestingController;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -24,5 +24,19 @@ describe('CompileService', () => {
 
   it('should be created', () => {
     expect(service).toBeTruthy();
+  });
+
+  it('expect compile to run', () => {
+    service.compile('code', 'challenge name');
+    expect(service).toBeTruthy();
+  });
+
+  it('expect /compile endpoint to be called', (done) => {
+    service.compile('code', 'challenge').subscribe(res => {
+      expect(res.compileResult).toBe('success');
+      done();
+    });
+    const req = httpMock.expectOne('/compile');
+    req.flush({compileResult: 'success'});
   });
 });

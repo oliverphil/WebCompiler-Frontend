@@ -46,13 +46,13 @@ export class EditorComponent implements OnInit, OnDestroy {
     this.challenges = this.challengesService.getCurrentChallenge();
     this.s = this.challenges.subscribe(res => {
       this.challenge = res;
-      this.code = localStorage.getItem(`challenge${this.challengesService.currentChallenge}`) || res.starterCode;
+      this.code = res.starterCode;
     });
     this.challengesService.initChallenges();
   }
 
   ngOnDestroy() {
-    this.s?.unsubscribe();
+    this.s.unsubscribe();
   }
 
   async compile() {
@@ -69,7 +69,7 @@ export class EditorComponent implements OnInit, OnDestroy {
         className: 'ace_error'
       });
     });
-    this.compilationResult = res.compileResult;
+    this.compilationResult = res?.compileResult || 'Error while compiling';
   }
 
   updateCode(e) {
