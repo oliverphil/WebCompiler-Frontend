@@ -8,15 +8,11 @@ import {ChallengeInstruction} from '../../../models';
   templateUrl: './editor-header.component.html',
   styleUrls: ['./editor-header.component.scss']
 })
-export class EditorHeaderComponent implements OnInit {
+export class EditorHeaderComponent {
 
   constructor(
     public challengesService: ChallengesService
   ) { }
-
-  ngOnInit(): void {
-    // this.challenges = this.challengesService.getCurrentChallenge();
-  }
 
   hasNext(): boolean {
     return this.challengesService.hasNext();

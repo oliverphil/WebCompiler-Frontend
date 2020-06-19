@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {ChallengeInstruction} from '../../models';
 import {Observable, Subject} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
@@ -23,7 +23,8 @@ export class ChallengesService {
 
   initChallenges() {
     if (!this.challenges) {
-      this.http.get<ChallengeInstruction[]>(`${environment.apiUrl}/challenges`).subscribe(res => {
+      const request = this.http.get<ChallengeInstruction[]>(`${environment.apiUrl}/challenges`);
+      request.subscribe(res => {
         res.filter(c => c.instructions.includes('img')).forEach(challenge => {
           const instructions = challenge.instructions;
           const instArr = instructions.split('"');
@@ -73,5 +74,12 @@ export class ChallengesService {
 
   getCurrentChallenge(): Observable<ChallengeInstruction> {
     return this.challenge.asObservable();
+  }
+
+  updateUsersCode(code: string): void {
+    if (this.challenges) {
+      const chal = this.challenges[this.currentChallenge];
+      chal.userCode = chal.starterCode = code ? code : chal.starterCode;
+    }
   }
 }

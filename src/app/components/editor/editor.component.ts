@@ -1,19 +1,19 @@
-import {AfterViewChecked, AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {AfterContentChecked, AfterViewChecked, AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {CompileService} from '../../services/compile-service.service';
 import {ChallengeInstruction, CompilationResult, Decoration} from '../../../models';
 import {AceComponent, AceConfigInterface, AceDirective} from 'ngx-ace-wrapper';
 import 'brace';
 import 'brace/mode/java';
-import 'brace/theme/github';
+import 'brace/theme/crimson_editor';
 import {ChallengesService} from '../../services/challenges.service';
-import {Observable} from 'rxjs';
+import {Observable, Subject, Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-editor',
   templateUrl: './editor.component.html',
   styleUrls: ['./editor.component.scss']
 })
-export class EditorComponent implements OnInit {
+export class EditorComponent implements OnInit, OnDestroy {
 
   code = [
     'public static void main(String args[]) {',
@@ -25,16 +25,17 @@ export class EditorComponent implements OnInit {
 
   config: AceConfigInterface = {
     mode: 'java',
-    theme: 'github',
+    theme: 'crimson_editor',
     showGutter: true
   };
 
   decs: Decoration[] = [];
 
-  @ViewChild(AceDirective) directiveRef?: AceDirective;
   @ViewChild(AceComponent) componentRef?: AceComponent;
 
   challenges: Observable<ChallengeInstruction>;
+
+  s: Subscription;
 
   constructor(
     private compileService: CompileService,
@@ -43,10 +44,14 @@ export class EditorComponent implements OnInit {
 
   ngOnInit() {
     this.challenges = this.challengesService.getCurrentChallenge();
-    this.challenges.subscribe(res => {
-      this.code = res.starterCode;
+    this.s = this.challenges.subscribe(res => {
+      this.code = localStorage.getItem(`challenge${this.challengesService.currentChallenge}`) || res.starterCode;
     });
     this.challengesService.initChallenges();
+  }
+
+  ngOnDestroy() {
+    this.s?.unsubscribe();
   }
 
   async compile() {
@@ -64,6 +69,10 @@ export class EditorComponent implements OnInit {
       });
     });
     this.compilationResult = res.compileResult;
+  }
+
+  updateCode(e) {
+    this.challengesService.updateUsersCode(this.code);
   }
 
   test(){}
