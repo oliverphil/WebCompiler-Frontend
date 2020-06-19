@@ -14,7 +14,7 @@ angular_tests:
   stage: test
   script:
     - ng test --code-coverage --progress false --watch false
-  coverage: '/Lines \W+: \d+\.\d+%.*/'
+  coverage: '/Lines\W+:\W\d+\.?\d*%.*/'
   artifacts:
     paths:
       - coverage/
