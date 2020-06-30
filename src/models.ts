@@ -13,4 +13,10 @@ export class ChallengeInstruction {
   starterCode: string;
   challengeName: string;
   userCode?: string;
+  complete?: boolean;
+}
+
+export class TestResults {
+  compileErrors?: string[];
+  testResults?: string[];
 }

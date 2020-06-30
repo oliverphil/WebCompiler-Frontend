@@ -29,6 +29,9 @@ export class EditorComponent implements OnInit, OnDestroy {
     showGutter: true
   };
 
+  compiling = false;
+  running = false;
+
   decs: Decoration[] = [];
 
   @ViewChild(AceComponent) componentRef?: AceComponent;
@@ -36,6 +39,9 @@ export class EditorComponent implements OnInit, OnDestroy {
   challenges: Observable<ChallengeInstruction>;
   challenge: ChallengeInstruction;
   s: Subscription;
+
+  testResults: any;
+  testCompile = true;
 
   constructor(
     private compileService: CompileService,
@@ -47,6 +53,9 @@ export class EditorComponent implements OnInit, OnDestroy {
     this.s = this.challenges.subscribe(res => {
       this.challenge = res;
       this.code = res.starterCode;
+      this.compilationResult = '';
+      this.testResults = undefined;
+      this.testCompile = true;
     });
     this.challengesService.initChallenges();
   }
@@ -56,6 +65,7 @@ export class EditorComponent implements OnInit, OnDestroy {
   }
 
   async compile() {
+    this.compiling = true;
     const aceSession = this.componentRef.directiveRef.ace().getSession();
     const res = await this.compileService.compile(this.code, this.challenge?.challengeName).toPromise();
     this.decs.forEach(dec => aceSession.removeGutterDecoration(dec.lineNumber, dec.className));
@@ -70,11 +80,30 @@ export class EditorComponent implements OnInit, OnDestroy {
       });
     });
     this.compilationResult = res?.compileResult || 'Error while compiling';
+    this.compiling = false;
   }
 
   updateCode(e) {
     this.challengesService.updateUsersCode(this.code);
   }
 
-  test(){}
+  async test() {
+    this.running = true;
+    const res = await this.compileService.runTests(this.challenge?.challengeName).toPromise();
+    if (res.compileErrors) {
+      this.testCompile = false;
+    } else if (res.testResults) {
+      this.testCompile = true;
+      const success = Number(res.testResults.filter(a => a.includes('successful'))[0].split(' ')[9]);
+      const total = Number(res.testResults.filter(a => a.includes('found'))[0].split(' ')[9]);
+      if (success === total) {
+        this.challengesService.markAsDone();
+      }
+      this.testResults = {
+        success,
+        total
+      };
+    }
+    this.running = false;
+  }
 }
