@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {CompilationResult} from '../../models';
+import {CompilationResult, TestResults} from '../../models';
 import {environment} from '../../environments/environment';
 
 @Injectable({
@@ -12,8 +12,16 @@ export class CompileService {
 
   compile(code: string, challengeName: string) {
     const sessionKey = localStorage.getItem('sessionKey');
-    return this.http.post<CompilationResult>(`${environment.apiUrl}/compile`, {
+    return this.http.post<CompilationResult>('/compile', {
       code,
+      sessionKey,
+      challengeName
+    });
+  }
+
+  runTests(challengeName: string) {
+    const sessionKey = localStorage.getItem('sessionKey');
+    return this.http.post<TestResults>('/test', {
       sessionKey,
       challengeName
     });

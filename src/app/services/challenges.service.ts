@@ -83,4 +83,8 @@ export class ChallengesService {
       chal.userCode = chal.starterCode = code ? code : chal.starterCode;
     }
   }
+
+  markAsDone() {
+    this.challenges[this.currentChallenge].complete = true;
+  }
 }

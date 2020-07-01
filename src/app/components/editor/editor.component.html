@@ -4,11 +4,32 @@
   <ace [config]="config" [(value)]="code" id="editor" (change)="updateCode($event)"></ace>
 
   <div class="form-group w-75 d-flex justify-content-center" id="control-group">
-    <button class="btn btn-primary" (click)="compile()">Compile</button>
-    <button class="btn btn-success ml-5" (click)="test()" disabled>Run</button>
+    <button class="btn btn-primary pt-2" [class.compiling]="compiling" (click)="compile()" [disabled]="compiling || running">
+      <mat-icon *ngIf="compiling">
+        <mat-spinner diameter="24" color="accent"></mat-spinner>
+      </mat-icon>
+      <p [class]="compiling ? 'd-none' : 'd-inline'">Compile</p>
+    </button>
+    <button class="btn btn-success ml-5" [class.running]="running" (click)="test()"
+            [disabled]="!compilationResult || compiling || running">
+      <mat-icon *ngIf="running">
+        <mat-spinner diameter="24" color="accent"></mat-spinner>
+      </mat-icon>
+      <p [class]="running ? 'd-none' : 'd-inline'">Run Tests</p>
+    </button>
+    <button class="btn ml-5"
+            [class.btn-success]="testResults && testResults.total == testResults.success"
+            [class.btn-warning]="testResults && testResults.total != testResults.success"
+            [class.btn-secondary]="testCompile && !testResults"
+            [class.btn-danger]="!testCompile"
+            disabled>
+      <p class="d-inline" *ngIf="testResults">{{testResults.success}}/{{testResults.total}} Tests Passed</p>
+      <p class="d-inline" *ngIf="!testResults && testCompile">No Results</p>
+      <p class="d-inline" *ngIf="!testCompile">Tests Couldn't Compile</p>
+    </button>
   </div>
 
-  <div class="form-group w-75" id="console-group">
+  <div class="form-group w-75 mt-4" id="console-group">
       <label for="console">Console</label>
       <pre>
         <textarea [innerHTML]="compilationResult" class="form-control overflow-scroll"

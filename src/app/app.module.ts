@@ -17,6 +17,8 @@ import { ChallengeEditorComponent } from './components/challenge-editor/challeng
 import {SplitterModule} from '@syncfusion/ej2-angular-layouts';
 import {MarkdownModule, MarkdownService, MarkedOptions, MarkedRenderer} from 'ngx-markdown';
 import { EditorHeaderComponent } from './components/editor-header/editor-header.component';
+import {MatIcon, MatIconModule} from '@angular/material/icon';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 const DEFAULT_ACE_CONFIG: AceConfigInterface = {
 
@@ -43,7 +45,9 @@ const DEFAULT_ACE_CONFIG: AceConfigInterface = {
     ReactiveFormsModule,
     AceModule,
     SplitterModule,
-    MarkdownModule.forRoot()
+    MarkdownModule.forRoot(),
+    MatIconModule,
+    MatProgressSpinnerModule
   ],
   providers: [{
     provide: ACE_CONFIG,

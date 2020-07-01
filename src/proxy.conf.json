@@ -2,5 +2,9 @@
   "/compile": {
     "target": "http://127.0.0.1:9100",
     "secure": false
+  },
+  "/test": {
+    "target": "http://127.0.0.1:9100",
+    "secure": false
   }
 }
