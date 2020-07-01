@@ -23,7 +23,7 @@ export class ChallengesService {
 
   initChallenges() {
     if (!this.challenges) {
-      const request = this.http.get<ChallengeInstruction[]>(`${environment.apiUrl}/challenges`);
+      const request = this.http.get<ChallengeInstruction[]>(`/challenges`);
       request.subscribe(res => {
         res.filter(c => c.instructions.includes('img')).forEach(challenge => {
           const instructions = challenge.instructions;

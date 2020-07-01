@@ -102,14 +102,14 @@ describe('ChallengesService', () => {
 
   it('check init challenges runs', () => {
     service.initChallenges();
-    const req = httpMock.expectOne(`${environment.apiUrl}/challenges`);
+    const req = httpMock.expectOne(`/challenges`);
     req.flush(testChallenges);
     expect(service.currentChallenge).toBe(0);
   });
 
   it('check images get correct path', () => {
     service.initChallenges();
-    const req = httpMock.expectOne(`${environment.apiUrl}/challenges`);
+    const req = httpMock.expectOne(`/challenges`);
     req.flush([{
       instructions: '<img src="testImage.png">',
       starterCode: 'code1',
@@ -127,7 +127,7 @@ describe('ChallengesService', () => {
   it('check when challenges already exist', () => {
     service.challenges = undefined;
     service.initChallenges();
-    const req = httpMock.expectOne(`${environment.apiUrl}/challenges`);
+    const req = httpMock.expectOne(`/challenges`);
     req.flush(testChallenges);
     service.initChallenges();
     httpMock.expectNone(`${environment.apiUrl}/challenges`);
