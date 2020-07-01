@@ -134,4 +134,17 @@ describe('ChallengesService', () => {
     expect(service.currentChallenge).toBe(0);
     expect(service.challenges).toEqual(testChallenges);
   });
+
+  it('mark as done sets done flag on challenge', (done) => {
+    const obs = service.getCurrentChallenge();
+    service.challenges = testChallenges;
+    service.currentChallenge = 0;
+    const sub = obs.subscribe(res => {
+      expect(res.complete).toBeTruthy();
+      sub.unsubscribe();
+      done();
+    });
+    service.markAsDone();
+    service.gotoChallenge(0);
+  });
 });

@@ -2,18 +2,19 @@ import {async, ComponentFixture, fakeAsync, TestBed} from '@angular/core/testing
 
 import { EditorComponent } from './editor.component';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
-import {ChallengeInstruction, CompilationResult, Decoration} from '../../../models';
+import {ChallengeInstruction, CompilationResult, Decoration, TestResults} from '../../../models';
 import {of, Subject} from 'rxjs';
 import {ACE_CONFIG, AceModule} from 'ngx-ace-wrapper';
 import {CompileService} from '../../services/compile-service.service';
 import {ChallengesService} from '../../services/challenges.service';
+import compile = WebAssembly.compile;
 
 describe('EditorComponent', () => {
   let component: EditorComponent;
   let fixture: ComponentFixture<EditorComponent>;
 
-  const compileSpy = jasmine.createSpyObj('CompileService', ['compile']);
-  const challengeServicesSpy = jasmine.createSpyObj('ChallengesService', ['getCurrentChallenge', 'initChallenges']);
+  const compileSpy = jasmine.createSpyObj('CompileService', ['compile', 'runTests']);
+  const challengeServicesSpy = jasmine.createSpyObj('ChallengesService', ['getCurrentChallenge', 'initChallenges', 'markAsDone']);
 
 
   const successfulCompilation: CompilationResult = {
@@ -64,6 +65,7 @@ describe('EditorComponent', () => {
     challengeServicesSpy.initChallenges = () => {
       subj.next(exampleChallenge);
     };
+    challengeServicesSpy.markAsDone = () => {};
     fixture = TestBed.createComponent(EditorComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -131,6 +133,56 @@ describe('EditorComponent', () => {
     component.compile().then(() => {
       expect(component.compilationResult).toBe('Error while compiling');
       expect(component.decs).toEqual([]);
+      done();
+    });
+  });
+
+  const successfulRun: TestResults = {
+    testResults: [
+      '         2 successful',
+      '         2 found'
+    ]
+  };
+
+  const failedTests: TestResults = {
+    testResults: [
+      '         1 successful',
+      '         2 found'
+    ]
+  }
+
+  it('test function should run', (done) => {
+    compileSpy.runTests = (code) => of(successfulRun);
+    component.test().then(() => {
+      expect(component.testCompile).toBeTrue();
+      expect(component.testResults.success).toBe(2);
+      expect(component.testResults.total).toBe(2);
+      done();
+    });
+  });
+
+  it('run tests with compilation errors', (done) => {
+    compileSpy.runTests = (code) => of({compileErrors: ['errors']});
+    component.test().then(() => {
+      expect(component.testCompile).toBeFalse();
+      done();
+    });
+  });
+
+  it('run tests with some failures', (done) => {
+    compileSpy.runTests = (code) => of(failedTests);
+    component.test().then(() => {
+      expect(component.testCompile).toBeTrue();
+      expect(component.testResults.total).toBe(2);
+      expect(component.testResults.success).toBe(1);
+      done();
+    });
+  });
+
+  it('empty result', (done) => {
+    compileSpy.runTests = (code) => of({});
+    component.test().then(() => {
+      expect(component.running).toBeFalse();
       done();
     });
   });
