@@ -9,7 +9,7 @@ import {Router} from '@angular/router';
 })
 export class DeclarationComponent implements OnInit {
 
-  checkbox: boolean = false;
+  checkbox = false;
 
   constructor(
     private sessionService: SessionService,
@@ -18,6 +18,10 @@ export class DeclarationComponent implements OnInit {
 
   ngOnInit(): void {
     localStorage.clear();
+  }
+
+  checkboxChange(e) {
+    this.checkbox = e.target.checked;
   }
 
   continue() {

@@ -75,7 +75,7 @@
   </p>
 
   <div class="form-check d-block">
-    <input id="agree" class="form-check-input" type="checkbox" (click)="checkbox=!checkbox">
+    <input id="agree" class="form-check-input" type="checkbox" (change)="checkboxChange($event)" [defaultChecked]="false" />
     <label for="agree" class="form-check-label">I Agree</label>
   </div>
 
