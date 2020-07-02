@@ -68,16 +68,18 @@
     <p class="font-weight-bold d-inline-block">Name:</p> David J. Pearce
   </div>
 
-  <h4>Disclaimer</h4>
-  <p id="disclaimer">
-  <p class="font-weight-bold">
-    By continuing, you agree to the above information and are giving consent for us to use your responses in this research.
-  </p>
+  <div *ngIf="!recap">
+    <h4>Disclaimer</h4>
+    <p id="disclaimer">
+    <p class="font-weight-bold">
+      By continuing, you agree to the above information and are giving consent for us to use your responses in this research.
+    </p>
 
-  <div class="form-check d-block">
-    <input id="agree" class="form-check-input" type="checkbox" (change)="checkboxChange($event)" [defaultChecked]="false" />
-    <label for="agree" class="form-check-label">I Agree</label>
+    <div class="form-check d-block">
+      <input id="agree" class="form-check-input" type="checkbox" (change)="checkboxChange($event)" [defaultChecked]="false" />
+      <label for="agree" class="form-check-label">I Agree</label>
+    </div>
+
+    <button id="submit" class="btn btn-primary mt-3" (click)="continue()" [disabled]="!checkbox">Continue</button>
   </div>
-
-  <button id="submit" class="btn btn-primary mt-3" (click)="continue()" [disabled]="!checkbox">Continue</button>
 </div>

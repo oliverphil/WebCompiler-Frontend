@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {SessionService} from '../../services/session.service';
 import {Router} from '@angular/router';
 
@@ -10,6 +10,7 @@ import {Router} from '@angular/router';
 export class DeclarationComponent implements OnInit {
 
   checkbox = false;
+  @Input() recap = false;
 
   constructor(
     private sessionService: SessionService,
@@ -17,7 +18,9 @@ export class DeclarationComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    localStorage.clear();
+    if (!this.recap) {
+      localStorage.clear();
+    }
   }
 
   checkboxChange(e) {

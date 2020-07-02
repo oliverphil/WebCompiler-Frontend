@@ -40,4 +40,9 @@ describe('EditorHeaderComponent', () => {
     component.prev();
     expect(prevSpy).toHaveBeenCalled();
   });
+
+  it('show menu should work', () => {
+    component.showMenu();
+    expect(component).toBeTruthy();
+  });
 });

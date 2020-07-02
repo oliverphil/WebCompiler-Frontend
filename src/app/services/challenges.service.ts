@@ -35,6 +35,9 @@ export class ChallengesService {
           }
           challenge.instructions = instArr.join('"');
         });
+        res.forEach((c, index) => {
+          c.index = index;
+        });
         this.challenges = res;
         this.currentChallenge = 0;
         this.challenge.next(this.challenges[0]);
