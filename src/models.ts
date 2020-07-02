@@ -14,6 +14,7 @@ export class ChallengeInstruction {
   challengeName: string;
   userCode?: string;
   complete?: boolean;
+  index?: number;
 }
 
 export class TestResults {

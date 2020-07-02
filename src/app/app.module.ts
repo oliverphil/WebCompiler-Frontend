@@ -4,7 +4,7 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { EditorComponent } from './components/editor/editor.component';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import {NgbModule, NgbTooltipModule} from '@ng-bootstrap/ng-bootstrap';
 import {HttpClient, HttpClientModule} from '@angular/common/http';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { DeclarationComponent } from './components/declaration/declaration.component';
@@ -19,6 +19,7 @@ import {MarkdownModule, MarkdownService, MarkedOptions, MarkedRenderer} from 'ng
 import { EditorHeaderComponent } from './components/editor-header/editor-header.component';
 import {MatIcon, MatIconModule} from '@angular/material/icon';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import { MenuModalComponent } from './components/menu-modal/menu-modal.component';
 
 const DEFAULT_ACE_CONFIG: AceConfigInterface = {
 
@@ -32,7 +33,8 @@ const DEFAULT_ACE_CONFIG: AceConfigInterface = {
     InformationFormComponent,
     ChallengeDetailsComponent,
     ChallengeEditorComponent,
-    EditorHeaderComponent
+    EditorHeaderComponent,
+    MenuModalComponent
   ],
   imports: [
     BrowserModule,
@@ -47,7 +49,8 @@ const DEFAULT_ACE_CONFIG: AceConfigInterface = {
     SplitterModule,
     MarkdownModule.forRoot(),
     MatIconModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    NgbTooltipModule
   ],
   providers: [{
     provide: ACE_CONFIG,

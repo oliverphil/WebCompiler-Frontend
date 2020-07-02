@@ -11,3 +11,30 @@ html, body {
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+// modal animation
+@keyframes modal-fade {
+  from {
+    top: -50px;
+    opacity: 0;
+  }
+
+  to {
+    top: 0;
+    opacity: 1;
+  }
+}
+
+.modal {
+  top: -100px;
+  animation: ease-in-out .3s modal-fade;
+
+  &.show {
+    top: 0;
+  }
+  .modal-body {
+    &:focus {
+      outline: none;
+    }
+  }
+}

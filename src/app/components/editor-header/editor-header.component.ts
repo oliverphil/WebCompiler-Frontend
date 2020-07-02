@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import {ChallengesService} from '../../services/challenges.service';
 import {Observable} from 'rxjs';
 import {ChallengeInstruction} from '../../../models';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {MenuModalComponent} from '../menu-modal/menu-modal.component';
 
 @Component({
   selector: 'app-editor-header',
@@ -11,7 +13,8 @@ import {ChallengeInstruction} from '../../../models';
 export class EditorHeaderComponent {
 
   constructor(
-    public challengesService: ChallengesService
+    public challengesService: ChallengesService,
+    private modalService: NgbModal
   ) { }
 
   hasNext(): boolean {
@@ -28,5 +31,12 @@ export class EditorHeaderComponent {
 
   prev() {
     this.challengesService.prev();
+  }
+
+  showMenu() {
+    this.modalService.open(MenuModalComponent, {
+      keyboard: true,
+
+    });
   }
 }
