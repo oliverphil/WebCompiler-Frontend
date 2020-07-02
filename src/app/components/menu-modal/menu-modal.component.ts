@@ -17,7 +17,7 @@ export class MenuModalComponent implements OnInit {
 
   constructor(
     public modal: NgbActiveModal,
-    private challengesService: ChallengesService,
+    public challengesService: ChallengesService,
     public modalService: NgbModal
   ) { }
 

@@ -39,4 +39,16 @@ describe('DeclarationComponent', () => {
 
     expect(navArgs).toBe('user-information', 'should navigate to user form');
   });
+
+  it('checkbox should toggle', () => {
+    component.checkboxChange({target: {checked: true}});
+    expect(component.checkbox).toBeTrue();
+  });
+
+  it('recap shouldn\'t clear storage', () => {
+    localStorage.setItem('testItem', 'content');
+    component.recap = true;
+    component.ngOnInit();
+    expect(localStorage.getItem('testItem')).toBeTruthy();
+  });
 });
