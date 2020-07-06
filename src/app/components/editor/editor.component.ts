@@ -41,7 +41,8 @@ export class EditorComponent implements OnInit, OnDestroy {
   s: Subscription;
 
   testResults: any;
-  testCompile = true;
+  testCompile = false;
+  timeout = false;
 
   constructor(
     private compileService: CompileService,
@@ -55,7 +56,8 @@ export class EditorComponent implements OnInit, OnDestroy {
       this.code = res.starterCode;
       this.compilationResult = '';
       this.testResults = undefined;
-      this.testCompile = true;
+      this.testCompile = false;
+      this.timeout = false;
     });
     this.challengesService.initChallenges();
   }
@@ -90,10 +92,15 @@ export class EditorComponent implements OnInit, OnDestroy {
   async test() {
     this.running = true;
     const res = await this.compileService.runTests(this.challenge?.challengeName).toPromise();
+    this.testResults = undefined;
+    this.timeout = false;
     if (res.compileErrors) {
-      this.testCompile = false;
-    } else if (res.testResults) {
       this.testCompile = true;
+    } else if (res.timeout) {
+      this.timeout = true;
+      this.testCompile = undefined;
+    } else if (res.testResults) {
+      this.testCompile = false;
       const success = Number(res.testResults.filter(a => a.includes('successful'))[0].split(' ')[9]);
       const total = Number(res.testResults.filter(a => a.includes('found'))[0].split(' ')[9]);
       if (success === total) {

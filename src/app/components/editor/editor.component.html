@@ -20,12 +20,13 @@
     <button class="btn ml-5"
             [class.btn-success]="testResults && testResults.total == testResults.success"
             [class.btn-warning]="testResults && testResults.total != testResults.success"
-            [class.btn-secondary]="testCompile && !testResults"
-            [class.btn-danger]="!testCompile"
+            [class.btn-secondary]="!testCompile && !testResults"
+            [class.btn-danger]="testCompile || timeout"
             disabled>
       <p class="d-inline" *ngIf="testResults">{{testResults.success}}/{{testResults.total}} Tests Passed</p>
-      <p class="d-inline" *ngIf="!testResults && testCompile">No Results</p>
-      <p class="d-inline" *ngIf="!testCompile">Tests Couldn't Compile</p>
+      <p class="d-inline" *ngIf="!testResults && !testCompile && !timeout">No Results</p>
+      <p class="d-inline" *ngIf="testCompile">Tests Couldn't Compile</p>
+      <p class="d-inline" *ngIf="timeout">Timeout in Tests</p>
     </button>
   </div>
 

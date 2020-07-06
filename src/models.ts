@@ -20,4 +20,5 @@ export class ChallengeInstruction {
 export class TestResults {
   compileErrors?: string[];
   testResults?: string[];
+  timeout?: string;
 }
