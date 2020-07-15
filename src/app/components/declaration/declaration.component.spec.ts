@@ -5,6 +5,7 @@ import {RouterTestingModule} from '@angular/router/testing';
 import {InformationFormComponent} from '../information-form/information-form.component';
 import {AuthService} from '../../services/auth.service';
 import {Router} from '@angular/router';
+import {HttpClientTestingModule} from '@angular/common/http/testing';
 
 describe('DeclarationComponent', () => {
   let component: DeclarationComponent;
@@ -16,6 +17,9 @@ describe('DeclarationComponent', () => {
       declarations: [DeclarationComponent],
       providers: [
         {provide: Router, useValue: routerSpy}
+      ],
+      imports: [
+        HttpClientTestingModule
       ]
     })
       .compileComponents();

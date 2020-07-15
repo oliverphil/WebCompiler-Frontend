@@ -154,7 +154,7 @@ describe('EditorComponent', () => {
   it('test function should run', (done) => {
     compileSpy.runTests = (code) => of(successfulRun);
     component.test().then(() => {
-      expect(component.testCompile).toBeTrue();
+      expect(component.testCompile).toBeFalse();
       expect(component.testResults.success).toBe(2);
       expect(component.testResults.total).toBe(2);
       done();
@@ -164,7 +164,7 @@ describe('EditorComponent', () => {
   it('run tests with compilation errors', (done) => {
     compileSpy.runTests = (code) => of({compileErrors: ['errors']});
     component.test().then(() => {
-      expect(component.testCompile).toBeFalse();
+      expect(component.testCompile).toBeTrue();
       done();
     });
   });
@@ -172,7 +172,7 @@ describe('EditorComponent', () => {
   it('run tests with some failures', (done) => {
     compileSpy.runTests = (code) => of(failedTests);
     component.test().then(() => {
-      expect(component.testCompile).toBeTrue();
+      expect(component.testCompile).toBeFalse();
       expect(component.testResults.total).toBe(2);
       expect(component.testResults.success).toBe(1);
       done();
@@ -183,6 +183,15 @@ describe('EditorComponent', () => {
     compileSpy.runTests = (code) => of({});
     component.test().then(() => {
       expect(component.running).toBeFalse();
+      done();
+    });
+  });
+
+  it('timeout', (done) => {
+    compileSpy.runTests = (code) => of({timeout: {}});
+    component.test().then(() => {
+      expect(component.timeout).toBeTrue();
+      expect(component.testCompile).toBeUndefined();
       done();
     });
   });

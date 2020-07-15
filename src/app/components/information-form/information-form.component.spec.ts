@@ -7,12 +7,15 @@ import {FormsModule} from '@angular/forms';
 import {EditorComponent} from '../editor/editor.component';
 import {FormCompleteService} from '../../services/auth.service';
 import {Router} from '@angular/router';
+import {SessionService} from '../../services/session.service';
+import {of} from 'rxjs';
 
 describe('InformationFormComponent', () => {
   let component: InformationFormComponent;
   let fixture: ComponentFixture<InformationFormComponent>;
 
   const routerSpy = jasmine.createSpyObj('Router', ['navigateByUrl']);
+  const sessionSpy = jasmine.createSpyObj('SessionService', ['setFormCompleted']);
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -28,7 +31,8 @@ describe('InformationFormComponent', () => {
         FormsModule
       ],
       providers: [
-        {provide: Router, useValue: routerSpy}
+        {provide: Router, useValue: routerSpy},
+        {provide: SessionService, useValue: sessionSpy}
       ]
     })
     .compileComponents();
@@ -44,12 +48,14 @@ describe('InformationFormComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('submit should navigate to editor', () => {
-    component.submit('');
+  it('submit should navigate to editor', (done) => {
+    sessionSpy.setFormCompleted = data => of(null);
+    component.submit('').then(() => {
+      const spy = routerSpy.navigateByUrl as jasmine.Spy;
+      const navArgs = spy.calls.first().args[0];
 
-    const spy = routerSpy.navigateByUrl as jasmine.Spy;
-    const navArgs = spy.calls.first().args[0];
-
-    expect(navArgs).toBe('editor', 'should navigate to editor');
-  })
+      expect(navArgs).toBe('editor', 'should navigate to editor');
+      done();
+    });
+  });
 });
