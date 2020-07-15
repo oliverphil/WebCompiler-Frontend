@@ -4,6 +4,7 @@ import {AuthService, FormCompleteService} from './auth.service';
 import {RouterTestingModule} from '@angular/router/testing';
 import {ToastrModule} from 'ngx-toastr';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {HttpClientTestingModule} from '@angular/common/http/testing';
 
 describe('AuthService', () => {
   let service: AuthService;
@@ -14,7 +15,8 @@ describe('AuthService', () => {
       imports: [
         RouterTestingModule,
         ToastrModule.forRoot(),
-        BrowserAnimationsModule
+        BrowserAnimationsModule,
+        HttpClientTestingModule
       ]
     });
     service = TestBed.inject(AuthService);

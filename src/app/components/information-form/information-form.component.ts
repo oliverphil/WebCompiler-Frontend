@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {SessionService} from '../../services/session.service';
 import {Router} from '@angular/router';
+import {UserInformation} from '../../../models';
 
 @Component({
   selector: 'app-information-form',
@@ -9,13 +10,13 @@ import {Router} from '@angular/router';
 })
 export class InformationFormComponent implements OnInit {
 
-  public userInformation = {
+  public userInformation: UserInformation = {
     age: undefined,
     occupation: undefined,
     education: undefined,
     javaExperience: undefined,
     otherLanguages: undefined,
-    ide: undefined
+    ideExperience: undefined
   };
 
   javaExperienceOptions = [
@@ -45,8 +46,8 @@ export class InformationFormComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  submit(e) {
-    this.session.setFormCompleted();
+  async submit(e) {
+    await this.session.setFormCompleted(this.userInformation).toPromise();
     this.router.navigateByUrl('editor');
   }
 }

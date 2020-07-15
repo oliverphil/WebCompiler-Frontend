@@ -22,3 +22,13 @@ export class TestResults {
   testResults?: string[];
   timeout?: string;
 }
+
+export class UserInformation {
+  id?: string;
+  age: string;
+  occupation: string;
+  education: string;
+  javaExperience: string;
+  otherLanguages: string;
+  ideExperience: string;
+}
