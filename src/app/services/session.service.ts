@@ -1,13 +1,17 @@
 import { Injectable } from '@angular/core';
 import {of} from 'rxjs';
 import * as uuid from 'uuid';
+import {HttpClient} from '@angular/common/http';
+import {UserInformation} from '../../models';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SessionService {
 
-  constructor() { }
+  constructor(
+    private http: HttpClient
+  ) { }
 
   createSessionKey(): string {
     let sessionKey = localStorage.getItem('sessionKey');
@@ -27,7 +31,10 @@ export class SessionService {
     return localStorage.getItem('formCompleted') === 'true';
   }
 
-  setFormCompleted() {
+  setFormCompleted(userInformation: UserInformation) {
+    userInformation.id = localStorage.getItem('sessionKey');
+    console.log(userInformation);
     localStorage.setItem('formCompleted', 'true');
+    return this.http.post<UserInformation>('/storeUser', { ...userInformation });
   }
 }

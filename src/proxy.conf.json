@@ -10,5 +10,9 @@
   "/challenges": {
     "target": "http://127.0.0.1:9100",
     "secure": true
+  },
+  "/storeUser": {
+    "target": "http://127.0.0.1:9100",
+    "secure": false
   }
 }
