@@ -3,6 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { EditorHeaderComponent } from './editor-header.component';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {ChallengesService} from '../../services/challenges.service';
+import {RouterTestingModule} from '@angular/router/testing';
 
 describe('EditorHeaderComponent', () => {
   let component: EditorHeaderComponent;
@@ -12,7 +13,8 @@ describe('EditorHeaderComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ EditorHeaderComponent ],
       imports: [
-        HttpClientTestingModule
+        HttpClientTestingModule,
+        RouterTestingModule
       ]
     })
     .compileComponents();
