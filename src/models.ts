@@ -32,3 +32,7 @@ export class UserInformation {
   otherLanguages: string;
   ideExperience: string;
 }
+
+export class DeleteRequest {
+  id: string;
+}

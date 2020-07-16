@@ -33,7 +33,6 @@ export class SessionService {
 
   setFormCompleted(userInformation: UserInformation) {
     userInformation.id = localStorage.getItem('sessionKey');
-    console.log(userInformation);
     localStorage.setItem('formCompleted', 'true');
     return this.http.post<UserInformation>('/storeUser', { ...userInformation });
   }

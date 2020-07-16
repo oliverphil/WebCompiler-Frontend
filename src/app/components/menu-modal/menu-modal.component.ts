@@ -1,8 +1,11 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {NgbActiveModal, NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ChallengesService} from '../../services/challenges.service';
-import {ChallengeInstruction} from '../../../models';
+import {ChallengeInstruction, DeleteRequest} from '../../../models';
 import {DeclarationComponent} from '../declaration/declaration.component';
+import {Router} from '@angular/router';
+import {HttpClient} from '@angular/common/http';
+import {SessionService} from '../../services/session.service';
 
 @Component({
   selector: 'app-menu-modal',
@@ -18,7 +21,10 @@ export class MenuModalComponent implements OnInit {
   constructor(
     public modal: NgbActiveModal,
     public challengesService: ChallengesService,
-    public modalService: NgbModal
+    public modalService: NgbModal,
+    private router: Router,
+    private http: HttpClient,
+    private sessionService: SessionService
   ) { }
 
   ngOnInit(): void {
@@ -35,5 +41,13 @@ export class MenuModalComponent implements OnInit {
   goToChallenge(index: number) {
     this.challengesService.gotoChallenge(index);
     this.modal.close();
+  }
+
+  async finish() {
+    await this.http.delete<DeleteRequest>('storeUser', {headers: {
+      id: this.sessionService.getSessionKey()
+    }}).toPromise();
+    this.modal.close();
+    this.router.navigateByUrl('');
   }
 }
