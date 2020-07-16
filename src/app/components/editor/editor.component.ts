@@ -67,8 +67,11 @@ export class EditorComponent implements OnInit, OnDestroy {
       this.testResults = undefined;
       this.testCompile = false;
       this.timeout = false;
-      const aceSession = this.componentRef.directiveRef.ace().getSession();
-      this.decs.forEach(dec => aceSession.removeGutterDecoration(dec.lineNumber, dec.className));
+      if (this.componentRef) {
+        const aceSession = this.componentRef.directiveRef.ace().getSession();
+        this.decs.forEach(dec => aceSession.removeGutterDecoration(dec.lineNumber, dec.className));
+        this.decs = [];
+      }
     });
     this.challengesService.initChallenges();
   }
