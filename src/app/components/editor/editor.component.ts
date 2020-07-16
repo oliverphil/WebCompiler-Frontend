@@ -15,11 +15,20 @@ import {Observable, Subject, Subscription} from 'rxjs';
 })
 export class EditorComponent implements OnInit, OnDestroy {
 
-  code = [
+  private privCode = [
     'public static void main(String args[]) {',
     '\tSystem.out.println("Hello World");',
     '}'
   ].join('\n');
+
+  set code(code: string) {
+    this.challengesService.updateUsersCode(code);
+    this.privCode = code;
+  }
+
+  get code(): string {
+    return this.privCode;
+  }
 
   compilationResult = '';
 
@@ -58,6 +67,11 @@ export class EditorComponent implements OnInit, OnDestroy {
       this.testResults = undefined;
       this.testCompile = false;
       this.timeout = false;
+      if (this.componentRef) {
+        const aceSession = this.componentRef.directiveRef.ace().getSession();
+        this.decs.forEach(dec => aceSession.removeGutterDecoration(dec.lineNumber, dec.className));
+        this.decs = [];
+      }
     });
     this.challengesService.initChallenges();
   }
@@ -83,10 +97,6 @@ export class EditorComponent implements OnInit, OnDestroy {
     });
     this.compilationResult = res?.compileResult || 'Error while compiling';
     this.compiling = false;
-  }
-
-  updateCode(e) {
-    this.challengesService.updateUsersCode(this.code);
   }
 
   async test() {

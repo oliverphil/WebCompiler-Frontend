@@ -8,13 +8,19 @@ import {ACE_CONFIG, AceModule} from 'ngx-ace-wrapper';
 import {CompileService} from '../../services/compile-service.service';
 import {ChallengesService} from '../../services/challenges.service';
 import compile = WebAssembly.compile;
+import {timeout} from 'rxjs/operators';
 
 describe('EditorComponent', () => {
   let component: EditorComponent;
   let fixture: ComponentFixture<EditorComponent>;
 
   const compileSpy = jasmine.createSpyObj('CompileService', ['compile', 'runTests']);
-  const challengeServicesSpy = jasmine.createSpyObj('ChallengesService', ['getCurrentChallenge', 'initChallenges', 'markAsDone']);
+  const challengeServicesSpy = jasmine.createSpyObj('ChallengesService', [
+    'getCurrentChallenge',
+    'initChallenges',
+    'markAsDone',
+    'updateUsersCode'
+  ]);
 
 
   const successfulCompilation: CompilationResult = {
@@ -66,6 +72,7 @@ describe('EditorComponent', () => {
       subj.next(exampleChallenge);
     };
     challengeServicesSpy.markAsDone = () => {};
+    challengeServicesSpy.updateUsersCode = () => {};
     fixture = TestBed.createComponent(EditorComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -149,7 +156,7 @@ describe('EditorComponent', () => {
       '         1 successful',
       '         2 found'
     ]
-  }
+  };
 
   it('test function should run', (done) => {
     compileSpy.runTests = (code) => of(successfulRun);
@@ -194,5 +201,29 @@ describe('EditorComponent', () => {
       expect(component.testCompile).toBeUndefined();
       done();
     });
+  });
+
+  it('change challenge should remove decorations', (done) => {
+    const errorLines: Decoration[] = [
+      {
+        lineNumber: 0,
+        className: 'ace_error'
+      },
+      {
+        lineNumber: 1,
+        className: 'ace_error'
+      },
+      {
+        lineNumber: 2,
+        className: 'ace_error'
+      }
+    ];
+
+    component.decs = errorLines;
+    component.challenges.subscribe(() => {
+      expect(component.decs.length).toBe(0);
+      done();
+    });
+    subj.next({challengeName: '', instructions: '', starterCode: ''});
   });
 });
