@@ -48,6 +48,7 @@ export class MenuModalComponent implements OnInit {
       id: this.sessionService.getSessionKey()
     }}).toPromise();
     this.modal.close();
+    this.challengesService.challenges = undefined;
     this.router.navigateByUrl('');
   }
 }
