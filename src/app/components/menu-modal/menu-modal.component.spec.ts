@@ -2,16 +2,19 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { MenuModalComponent } from './menu-modal.component';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
-import {HttpClientTestingModule} from '@angular/common/http/testing';
+import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
+import {RouterTestingModule} from '@angular/router/testing';
 
 describe('MenuModalComponent', () => {
   let component: MenuModalComponent;
   let fixture: ComponentFixture<MenuModalComponent>;
+  let httpMock: HttpTestingController;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        HttpClientTestingModule
+        HttpClientTestingModule,
+        RouterTestingModule
       ],
       declarations: [ MenuModalComponent ],
       providers: [
@@ -19,6 +22,7 @@ describe('MenuModalComponent', () => {
       ]
     })
     .compileComponents();
+    httpMock = TestBed.inject(HttpTestingController);
   }));
 
   beforeEach(() => {
@@ -34,6 +38,14 @@ describe('MenuModalComponent', () => {
   it('show declaration should work', () => {
     component.showDeclaration();
     expect(component).toBeTruthy();
+  });
+
+  it('finish should close modal', (done) => {
+    component.finish().then(() => {
+      done();
+    });
+    const res = httpMock.expectOne(req => req.method === 'DELETE' && req.url === 'storeUser');
+    res.flush({});
   });
 
   it('go to challenge should navigate to challenge', () => {
