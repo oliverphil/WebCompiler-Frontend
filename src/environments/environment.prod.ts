@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'http://127.0.0.1:9100'
+  apiUrl: 'http://incrementalworkloads.oliverphil.com/'
 };
