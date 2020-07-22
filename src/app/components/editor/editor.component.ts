@@ -1,12 +1,24 @@
-import {AfterContentChecked, AfterViewChecked, AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {
+  AfterContentChecked,
+  AfterViewChecked,
+  AfterViewInit,
+  Component,
+  ElementRef,
+  HostListener,
+  OnDestroy,
+  OnInit,
+  ViewChild
+} from '@angular/core';
 import {CompileService} from '../../services/compile-service.service';
-import {ChallengeInstruction, CompilationResult, Decoration} from '../../../models';
+import {ChallengeInstruction, CompilationResult, Decoration, DeleteRequest} from '../../../models';
 import {AceComponent, AceConfigInterface, AceDirective} from 'ngx-ace-wrapper';
 import 'brace';
 import 'brace/mode/java';
 import 'brace/theme/crimson_editor';
 import {ChallengesService} from '../../services/challenges.service';
 import {Observable, Subject, Subscription} from 'rxjs';
+import {SessionService} from '../../services/session.service';
+import {HttpClient} from '@angular/common/http';
 
 @Component({
   selector: 'app-editor',
@@ -55,8 +67,20 @@ export class EditorComponent implements OnInit, OnDestroy {
 
   constructor(
     private compileService: CompileService,
-    private challengesService: ChallengesService
+    private challengesService: ChallengesService,
+    private sessionService: SessionService,
+    private http: HttpClient
   ) { }
+
+  @HostListener('window:beforeunload', ['$event'])
+  unload(event){
+    if (this.sessionService.getSessionKey()) {
+      this.http.delete<DeleteRequest>('storeUser', {headers: {
+        id: this.sessionService.getSessionKey()
+      }}).toPromise();
+    }
+    event.returnValue = 'Are you sure?';
+  }
 
   ngOnInit() {
     this.challenges = this.challengesService.getCurrentChallenge();
