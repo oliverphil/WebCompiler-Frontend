@@ -19,6 +19,7 @@ import {ChallengesService} from '../../services/challenges.service';
 import {Observable, Subject, Subscription} from 'rxjs';
 import {SessionService} from '../../services/session.service';
 import {HttpClient} from '@angular/common/http';
+import {ToastrService} from 'ngx-toastr';
 
 @Component({
   selector: 'app-editor',
@@ -69,7 +70,8 @@ export class EditorComponent implements OnInit, OnDestroy {
     private compileService: CompileService,
     private challengesService: ChallengesService,
     private sessionService: SessionService,
-    private http: HttpClient
+    private http: HttpClient,
+    private toastr: ToastrService
   ) { }
 
   @HostListener('window:beforeunload', ['$event'])
@@ -107,46 +109,56 @@ export class EditorComponent implements OnInit, OnDestroy {
   async compile() {
     this.compiling = true;
     const aceSession = this.componentRef.directiveRef.ace().getSession();
-    const res = await this.compileService.compile(this.code, this.challenge?.challengeName).toPromise();
-    this.decs.forEach(dec => aceSession.removeGutterDecoration(dec.lineNumber, dec.className));
-    this.decs = [];
+    try {
+      const res = await this.compileService.compile(this.code, this.challenge?.challengeName).toPromise();
+      this.decs.forEach(dec => aceSession.removeGutterDecoration(dec.lineNumber, dec.className));
+      this.decs = [];
 
-    res?.errorLines.forEach(line => {
-      const lineNumber = Number.parseInt(line, 10);
-      aceSession.addGutterDecoration(lineNumber - 1, 'ace_error');
-      this.decs.push({
-        lineNumber: lineNumber - 1,
-        className: 'ace_error'
+      res?.errorLines.forEach(line => {
+        const lineNumber = Number.parseInt(line, 10);
+        aceSession.addGutterDecoration(lineNumber - 1, 'ace_error');
+        this.decs.push({
+          lineNumber: lineNumber - 1,
+          className: 'ace_error'
+        });
       });
-    });
-    this.compilationResult = res?.compileResult || 'Error while compiling';
-    this.compiling = false;
+      this.compilationResult = res?.compileResult || 'Error while compiling';
+    } catch {
+      this.toastr.warning('Error in compilation request, try run it again');
+    } finally {
+      this.compiling = false;
+    }
   }
 
   async test() {
     this.running = true;
-    const res = await this.compileService.runTests(this.challenge?.challengeName).toPromise();
-    this.testResults = undefined;
-    this.timeout = false;
-    if (res.compileErrors) {
-      this.testCompile = true;
-    } else if (res.timeout) {
-      this.timeout = true;
-      this.testCompile = undefined;
-    } else if (res.testResults) {
-      this.testCompile = false;
-      const succNum = res.testResults.filter(a => a.includes('successful'))[0].split(' ').filter(s => s !== '');
-      const success = Number(succNum[1]);
-      const num = res.testResults.filter(a => a.includes('found'))[0].split(' ').filter(s => s !== '');
-      const total = Number(num[1]);
-      if (success === total) {
-        this.challengesService.markAsDone();
+    try {
+      const res = await this.compileService.runTests(this.challenge?.challengeName).toPromise();
+      this.testResults = undefined;
+      this.timeout = false;
+      if (res.compileErrors) {
+        this.testCompile = true;
+      } else if (res.timeout) {
+        this.timeout = true;
+        this.testCompile = undefined;
+      } else if (res.testResults) {
+        this.testCompile = false;
+        const succNum = res.testResults.filter(a => a.includes('successful'))[0].split(' ').filter(s => s !== '');
+        const success = Number(succNum[1]);
+        const num = res.testResults.filter(a => a.includes('found'))[0].split(' ').filter(s => s !== '');
+        const total = Number(num[1]);
+        if (success === total) {
+          this.challengesService.markAsDone();
+        }
+        this.testResults = {
+          success,
+          total
+        };
       }
-      this.testResults = {
-        success,
-        total
-      };
+    } catch {
+      this.toastr.warning('Error in testing request, try run it again');
+    } finally {
+      this.running = false;
     }
-    this.running = false;
   }
 }
