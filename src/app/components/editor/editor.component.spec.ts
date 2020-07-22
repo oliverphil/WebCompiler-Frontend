@@ -146,15 +146,15 @@ describe('EditorComponent', () => {
 
   const successfulRun: TestResults = {
     testResults: [
-      '         2 successful',
-      '         2 found'
+      '[        2 successful',
+      '[        2 found'
     ]
   };
 
   const failedTests: TestResults = {
     testResults: [
-      '         1 successful',
-      '         2 found'
+      '[        1 successful',
+      '[        2 found'
     ]
   };
 
