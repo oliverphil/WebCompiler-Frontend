@@ -1,6 +1,8 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, HostListener, Input, OnDestroy, OnInit} from '@angular/core';
 import {SessionService} from '../../services/session.service';
 import {Router} from '@angular/router';
+import {DeleteRequest} from '../../../models';
+import {HttpClient} from '@angular/common/http';
 
 @Component({
   selector: 'app-declaration',

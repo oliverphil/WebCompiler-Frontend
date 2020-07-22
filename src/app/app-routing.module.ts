@@ -9,11 +9,6 @@ import {ChallengeEditorComponent} from './components/challenge-editor/challenge-
 
 const routes: Routes = [
   {
-    path: '',
-    redirectTo: '/declaration',
-    pathMatch: 'full'
-  },
-  {
     path: 'declaration',
     pathMatch: 'full',
     component: DeclarationComponent
@@ -27,6 +22,16 @@ const routes: Routes = [
     path: 'editor',
     component: ChallengeEditorComponent,
     canActivate: [FormCompleteService]
+  },
+  {
+    path: '',
+    redirectTo: '/declaration',
+    pathMatch: 'full'
+  },
+  {
+    path: '**',
+    redirectTo: '/editor',
+    pathMatch: 'full'
   }
 ];
 
