@@ -135,8 +135,10 @@ export class EditorComponent implements OnInit, OnDestroy {
       this.testCompile = undefined;
     } else if (res.testResults) {
       this.testCompile = false;
-      const success = Number(res.testResults.filter(a => a.includes('successful'))[0].split(' ')[9]);
-      const total = Number(res.testResults.filter(a => a.includes('found'))[0].split(' ')[9]);
+      const succNum = res.testResults.filter(a => a.includes('successful'))[0].split(' ').filter(s => s !== '');
+      const success = Number(succNum[1]);
+      const num = res.testResults.filter(a => a.includes('found'))[0].split(' ').filter(s => s !== '');
+      const total = Number(num[1]);
       if (success === total) {
         this.challengesService.markAsDone();
       }
