@@ -9,6 +9,7 @@ import {CompileService} from '../../services/compile-service.service';
 import {ChallengesService} from '../../services/challenges.service';
 import compile = WebAssembly.compile;
 import {timeout} from 'rxjs/operators';
+import {ToastrModule} from 'ngx-toastr';
 
 describe('EditorComponent', () => {
   let component: EditorComponent;
@@ -38,7 +39,8 @@ describe('EditorComponent', () => {
       declarations: [EditorComponent],
       imports: [
         HttpClientTestingModule,
-        AceModule
+        AceModule,
+        ToastrModule.forRoot()
       ],
       providers: [{
         provide: ACE_CONFIG,
