@@ -36,6 +36,10 @@ export class EditorComponent implements OnInit, OnDestroy {
 
   set code(code: string) {
     this.challengesService.updateUsersCode(code);
+    this.disableRun = true;
+    this.testResults = undefined;
+    this.testCompile = false;
+    this.timeout = false;
     this.privCode = code;
   }
 
@@ -46,6 +50,7 @@ export class EditorComponent implements OnInit, OnDestroy {
   compileTimestamp = '';
 
   compilationResult = '';
+  disableRun = true;
 
   config: AceConfigInterface = {
     mode: 'java',
@@ -127,6 +132,7 @@ export class EditorComponent implements OnInit, OnDestroy {
         });
       });
       this.compilationResult = res?.compileResult || 'Error while compiling';
+      this.disableRun = res?.errorLines.length > 0 ? true : false;
     } catch {
       this.toastr.warning('Error in compilation request, try run it again');
     } finally {

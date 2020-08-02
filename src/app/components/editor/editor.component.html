@@ -11,7 +11,7 @@
       <p [class]="compiling ? 'd-none' : 'd-inline'">Compile</p>
     </button>
     <button class="btn btn-success ml-5" [class.running]="running" (click)="test()"
-            [disabled]="!compilationResult || compiling || running">
+            [disabled]="!compilationResult || compiling || running || disableRun">
       <mat-icon *ngIf="running">
         <mat-spinner diameter="24" color="accent"></mat-spinner>
       </mat-icon>
