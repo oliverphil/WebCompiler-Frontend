@@ -26,12 +26,14 @@ describe('EditorComponent', () => {
 
   const successfulCompilation: CompilationResult = {
     compileResult: 'Compilation Successful',
-    errorLines: []
+    errorLines: [],
+    timestamp: 'test timestamp'
   };
 
   const unsuccessfulCompilation: CompilationResult = {
     compileResult: 'Compilation Unsuccessful',
-    errorLines: ['1', '2', '3']
+    errorLines: ['1', '2', '3'],
+    timestamp: 'timestamp 2'
   };
 
   beforeEach(async(() => {

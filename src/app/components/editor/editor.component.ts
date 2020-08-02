@@ -116,7 +116,7 @@ export class EditorComponent implements OnInit, OnDestroy {
       this.decs.forEach(dec => aceSession.removeGutterDecoration(dec.lineNumber, dec.className));
       this.decs = [];
 
-      this.compileTimestamp = res.timestamp;
+      this.compileTimestamp = res?.timestamp;
 
       res?.errorLines.forEach(line => {
         const lineNumber = Number.parseInt(line, 10);
