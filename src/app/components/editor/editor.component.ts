@@ -43,6 +43,8 @@ export class EditorComponent implements OnInit, OnDestroy {
     return this.privCode;
   }
 
+  compileTimestamp = '';
+
   compilationResult = '';
 
   config: AceConfigInterface = {
@@ -114,6 +116,8 @@ export class EditorComponent implements OnInit, OnDestroy {
       this.decs.forEach(dec => aceSession.removeGutterDecoration(dec.lineNumber, dec.className));
       this.decs = [];
 
+      this.compileTimestamp = res?.timestamp;
+
       res?.errorLines.forEach(line => {
         const lineNumber = Number.parseInt(line, 10);
         aceSession.addGutterDecoration(lineNumber - 1, 'ace_error');
@@ -133,7 +137,7 @@ export class EditorComponent implements OnInit, OnDestroy {
   async test() {
     this.running = true;
     try {
-      const res = await this.compileService.runTests(this.challenge?.challengeName).toPromise();
+      const res = await this.compileService.runTests(this.challenge?.challengeName, this.compileTimestamp).toPromise();
       this.testResults = undefined;
       this.timeout = false;
       if (res.compileErrors) {

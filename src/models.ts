@@ -1,6 +1,7 @@
 export class CompilationResult {
   compileResult: string;
   errorLines: string[];
+  timestamp: string;
 }
 
 export class Decoration {

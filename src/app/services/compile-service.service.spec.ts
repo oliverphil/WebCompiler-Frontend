@@ -45,7 +45,7 @@ describe('CompileService', () => {
       compileErrors: ['error'],
       testResults: ['test result']
     };
-    service.runTests('code').subscribe(res => {
+    service.runTests('code', 'timestamp').subscribe(res => {
       expect(res).toEqual(result);
       done();
     });

@@ -19,11 +19,12 @@ export class CompileService {
     });
   }
 
-  runTests(challengeName: string) {
+  runTests(challengeName: string, compileTimestamp: string) {
     const sessionKey = localStorage.getItem('sessionKey');
     return this.http.post<TestResults>('/test', {
       sessionKey,
-      challengeName
+      challengeName,
+      compileTimestamp
     });
   }
 }
