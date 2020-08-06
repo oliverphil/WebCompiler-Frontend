@@ -136,6 +136,9 @@ export class EditorComponent implements OnInit, OnDestroy {
 
   async compile() {
     this.compiling = true;
+    if (this.interval) {
+      clearInterval(this.interval);
+    }
     const aceSession = this.componentRef.directiveRef.ace().getSession();
     try {
       const res = await this.compileService.compile(this.code, this.challenge?.challengeName).toPromise();
