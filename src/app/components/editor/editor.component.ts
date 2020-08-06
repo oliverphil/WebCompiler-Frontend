@@ -50,6 +50,9 @@ export class EditorComponent implements OnInit, OnDestroy {
         clearInterval(this.interval);
       }
       this.interval = setInterval(() => {
+        if (!this.autoCompile && this.interval) {
+          clearInterval(this.interval);
+        }
         if (this.timeLeft > 0) {
           this.timeLeft--;
         } else {
