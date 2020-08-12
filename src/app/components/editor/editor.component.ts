@@ -34,7 +34,6 @@ export class EditorComponent implements OnInit, OnDestroy {
 
   interval;
   timeLeft = 5;
-  autoCompile = true;
 
   set code(code: string) {
     this.challengesService.updateUsersCode(code);
@@ -44,24 +43,19 @@ export class EditorComponent implements OnInit, OnDestroy {
     this.timeout = false;
     this.privCode = code;
 
-    if (this.autoCompile) {
-      this.timeLeft = 5;
-      if (this.interval) {
-        clearInterval(this.interval);
-      }
-      this.interval = setInterval(() => {
-        if (!this.autoCompile && this.interval) {
-          clearInterval(this.interval);
-        }
-        if (this.timeLeft > 0) {
-          this.timeLeft--;
-        } else {
-          clearInterval(this.interval);
-          this.compile();
-          this.timeLeft = 5;
-        }
-      }, 1000);
+    this.timeLeft = 5;
+    if (this.interval) {
+      clearInterval(this.interval);
     }
+    this.interval = setInterval(() => {
+      if (this.timeLeft > 0) {
+        this.timeLeft--;
+      } else {
+        clearInterval(this.interval);
+        this.compile();
+        this.timeLeft = 5;
+      }
+    }, 1000);
   }
 
   get code(): string {
