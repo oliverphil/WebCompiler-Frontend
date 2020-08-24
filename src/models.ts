@@ -26,6 +26,7 @@ export class TestResults {
 
 export class UserInformation {
   id?: string;
+  magic?: string;
   age: string;
   occupation: string;
   education: string;

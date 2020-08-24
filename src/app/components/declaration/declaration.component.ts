@@ -1,6 +1,6 @@
 import {Component, HostListener, Input, OnDestroy, OnInit} from '@angular/core';
 import {SessionService} from '../../services/session.service';
-import {Router} from '@angular/router';
+import {ActivatedRoute, ParamMap, Params, Router} from '@angular/router';
 import {DeleteRequest} from '../../../models';
 import {HttpClient} from '@angular/common/http';
 
@@ -16,7 +16,8 @@ export class DeclarationComponent implements OnInit {
 
   constructor(
     private sessionService: SessionService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
@@ -31,6 +32,8 @@ export class DeclarationComponent implements OnInit {
 
   continue() {
     this.sessionService.createSessionKey();
+    const mag = this.route.snapshot.queryParams?.id;
+    localStorage.setItem('mag', mag || 0);
     this.router.navigateByUrl('user-information');
   }
 }
