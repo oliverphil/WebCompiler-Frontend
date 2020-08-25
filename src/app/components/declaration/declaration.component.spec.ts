@@ -4,8 +4,9 @@ import { DeclarationComponent } from './declaration.component';
 import {RouterTestingModule} from '@angular/router/testing';
 import {InformationFormComponent} from '../information-form/information-form.component';
 import {AuthService} from '../../services/auth.service';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
+import {Observable, of} from 'rxjs';
 
 describe('DeclarationComponent', () => {
   let component: DeclarationComponent;
@@ -16,7 +17,11 @@ describe('DeclarationComponent', () => {
     TestBed.configureTestingModule({
       declarations: [DeclarationComponent],
       providers: [
-        {provide: Router, useValue: routerSpy}
+        {provide: Router, useValue: routerSpy},
+        {provide: ActivatedRoute,
+        useValue: {
+          snapshot: {queryParams: {id: 1}}
+        }}
       ],
       imports: [
         HttpClientTestingModule
